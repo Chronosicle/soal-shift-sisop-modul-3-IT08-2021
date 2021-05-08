@@ -16,7 +16,7 @@ int matrixB[row*col];
 int counter;
 
 unsigned long long faktorial(unsigned long long a){
-    int pembilang = 1, penyebut = 1;
+    unsigned long long pembilang = 1, penyebut = 1;
     unsigned long long ans = 0;
 
     if(a == 0){
@@ -24,17 +24,12 @@ unsigned long long faktorial(unsigned long long a){
         return 0;
     }
     else if (a >= matrixB[counter]){
-        for(int i = a; i > 0; i--){
-            pembilang *= i;
+        penyebut = a;
+        for(int i = 1; i < matrixB[counter]; i++){
+            pembilang *= penyebut;
+            penyebut--;
         }
-        for(int j = a-matrixB[counter]; j > 0; j--){
-            if (j == 0){
-                penyebut = 1;
-                break;
-            }
-            penyebut *= j;
-        }
-        ans = pembilang/penyebut;
+        ans = pembilang;
         counter++;
         return ans;
     }else if (matrixB[counter] > a){
