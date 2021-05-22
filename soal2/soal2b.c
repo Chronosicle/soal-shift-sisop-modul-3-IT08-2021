@@ -16,20 +16,25 @@ int matrixB[row*col];
 int counter;
 
 unsigned long long faktorial(unsigned long long a){
-    unsigned long long pembilang = 1, penyebut = 1;
+    int pembilang = 1, penyebut = 1;
     unsigned long long ans = 0;
 
-    if(a == 0){
+    if(a == 0 && matrixB[counter] == 0){
         counter++;
         return 0;
     }
     else if (a >= matrixB[counter]){
-        penyebut = a;
-        for(int i = 1; i < matrixB[counter]; i++){
-            pembilang *= penyebut;
-            penyebut--;
+        for(int i = a; i > 0; i--){
+            pembilang *= i;
         }
-        ans = pembilang;
+        for(int j = a-matrixB[counter]; j > 0; j--){
+            if (j == 0){
+                penyebut = 1;
+                break;
+            }
+            penyebut *= j;
+        }
+        ans = pembilang/penyebut;
         counter++;
         return ans;
     }else if (matrixB[counter] > a){
@@ -102,9 +107,9 @@ void main()
         pthread_join(tid[i],NULL);
 	}
 
-    
+
 	printf("\n");
 
 	shmdt(value);
 	shmctl(shmid, IPC_RMID, NULL);
-}
+} 
