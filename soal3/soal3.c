@@ -1,215 +1,294 @@
-#include <stdio.h>
 #include <pthread.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <stdio.h>
 #include <dirent.h>
-#include <string.h>
-#include <stdlib.h>
 #include <unistd.h>
-#include <ctype.h>
+#include <string.h>
+#include <sys/stat.h>
 
-pthread_t tid[1024];
-int current_thread = 0;
+#define MAX_SIZE 256
 
-struct file_data {
-    char file_name[1024];
-    char should_be_active_directory[1024];
-    char current_directory[1024];
-};
+char cwd[MAX_SIZE];
+int check;
+int iter = 0;
+int once = 0;
 
-int status = 1;
-int mode = 0;
+int isDirectory(const char *myPath);
 
-struct file_data fds[1024];
+void *pindahFile(void *filename);
 
-void print_fd(struct file_data fd) {
+int main(int argc, char **argv) 
+{
+  if (argc < 2)
+  {
+    puts("Masukan argumen dengan benar (-d / -f / *)");
+    return 0;
+  }
+
+  getcwd(cwd, sizeof(cwd));
+
+  
+  if (strcmp(argv[1], "-f") == 0)
+  {
+    check = 0;
     printf("");
-    printf("%s %s %s\n", fd.file_name, fd.should_be_active_directory, fd.current_directory);
-}
+    pthread_t myThreads[argc - 2];
+    int i = 2;
+    while(i < argc){
 
-void err() {
-    printf("");
-    printf("Usage:\n\t./soal3 -f /path/to/file1 /path/to/file2 ...\n\t./soal3 -d /path/to/dir\n\t./soal3 \\*");
-    exit(EXIT_FAILURE);
-}
+      // Jika direktori, maka ga bisa  
+      if(isDirectory(argv[i])){
+        printf("%s adalah direktori\n", argv[i]);
+      }
+      else{
+        // Create pthread
+        pthread_create(&myThreads[i-2], NULL, pindahFile, argv[i]);
+      }
 
-char *file_ext(char *file) {
-    if (file[0] == '.') return "Hidden";
-    printf("");
-    char *p = strchr(file, '.');
-    printf("");
-    if (p == NULL) return "Unknown";
+      i++;
+    }    
 
-    char *ext;
-    ext = (char *)malloc(sizeof(char*) * 200);
-    printf("");
-    sprintf(ext, "%.*s", strlen(file) - (p - file + 1), p + 1);
-    for (size_t i = 0; i < strlen(ext); ++i) {
-        printf("");
-        *(ext + i) = tolower(*(ext + i));
-    }
-    return ext;
-}
-
-void *categorize_file(void *argv) {
-    struct file_data *fd = (struct file_data *)argv;
-    printf("");
-
-    char current_file[1024];
-    sprintf(current_file, "%s/%s", fd->current_directory, fd->file_name);
-    printf("");
-
-    char ext[1024];
-    sprintf(ext, "%s/%s", fd->should_be_active_directory, file_ext(fd->file_name));
-    printf("");
-    mkdir(ext, 0755);
-
-    char new[1024];
-    sprintf(new, "%s/%s", ext, fd->file_name);
-
-    if (rename(current_file, new) < 0 && mode == 0) {
-        printf("%s: Sad, gagal :(\n", fd->file_name);
-        printf("");
-        status = 0;
-    } else if (mode == 0) {
-        printf("");
-        printf("%s : Berhasil dikategorikan\n", fd->file_name);
+    // join pthread
+    i = 0;
+    while(i < argc-2){
+      pthread_join(myThreads[i], NULL);
+      i++;
     }
 
-}
+  }
+  else if (strcmp(argv[1], "-d") == 0 && argc == 3)
+  {
+    // Ini program kedua (-d)
+    printf("");
+    check = 1;
+    int banyakFile = 0;
+    char files[MAX_SIZE][MAX_SIZE];
 
-void categorize_dir(char *directory_to_be_opened, char *should_be_active_directory, char *current_directory) {
-    DIR *directory = opendir(directory_to_be_opened);
-    struct dirent *d;
+    DIR *d;
+    struct dirent *dir;
+    chdir(argv[2]);
+    d = opendir(".");
 
-    if (chdir(current_directory) < 0) {
-        printf("");
-        printf("Error chdir %s\n", current_directory);
-    }
-
-    if (!directory) {
-        printf("");
-        printf("Error opening %s from %s\n", directory_to_be_opened, current_directory);
-        return;
-    }
-
-    while (d = readdir(directory)) {
-        if (strcmp(".", d->d_name) != 0 && strcmp("..", d->d_name) != 0) {
-            printf("");
-            DIR *tmp = opendir(d->d_name);
-
-            if (tmp) {
-                
-                char next_directory[1024];
-                sprintf(next_directory, "%s/%s", current_directory, d->d_name);
-                printf("");
-                categorize_dir(d->d_name, should_be_active_directory, next_directory);
-                chdir("..");
-            } else  {
-                printf("");
-                strcpy(fds[current_thread].file_name, d->d_name);
-                strcpy(fds[current_thread].should_be_active_directory, should_be_active_directory);
-                printf("");
-                strcpy(fds[current_thread].current_directory, current_directory);
-
-                pthread_create(&tid[current_thread], NULL, categorize_file, (void *)&fds[current_thread]);
-                ++current_thread;
-                printf("");
-            }
+    if (d)
+    {
+      while ((dir = readdir(d)) != NULL)
+      {
+        if(strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0){
+          continue;
         }
-    }
-}
-
-void categorize_files(int argc, char *files[], char *should_be_active_directory) {
-    for (int i = 2; i < argc; ++i) {
-        printf("");
-        char *p = strrchr(files[i], '/');
-
-        sprintf(fds[current_thread].file_name, "%.*s", strlen(files[i]) - (p - files[i] + 1), p + 1);
-        sprintf(fds[current_thread].should_be_active_directory, "%s", should_be_active_directory);
-        printf("");
-        sprintf(fds[current_thread].current_directory, "%.*s", p - files[i], files[i]);
-
-        pthread_create(&tid[current_thread], NULL, &categorize_file, (void *)&fds[current_thread]);
-        ++current_thread;
-        printf("");
-    }
-
-    int j = 0;
-
-    while(j < current_thread){
-        printf("");
-        pthread_join(tid[j], NULL);
-        j++;
-    }
-}
-
-int main(int argc, char *argv[]) {
-
-    if (argc < 2) {
-        printf("");
-        printf("Error\n");
-        exit(EXIT_FAILURE);
+        
+        // Jika direktori, maka ga bisa  
+        if(isDirectory(dir->d_name))
+        {
+          printf("%s adalah direktori\n", dir->d_name);
+        }
+        else
+        {
+          char tmp[100];
+          strcpy(tmp, dir->d_name);
+          sprintf(files[banyakFile], "%s/%s", argv[2], dir->d_name);
+          banyakFile++;                  
+        }
+      }
+      closedir(d);
     }
 
-    char dir[1024], active_dir[1024];
+    chdir(cwd);
+    pthread_t myThreads[banyakFile];
+
+    // create pthread
+    int i = 0; 
+    while(i < banyakFile){
+      pthread_create(&myThreads[i], NULL, pindahFile, files[i]);
+      i++;
+    }
+
+    // join pthread
+    i = 0;
+    while(i < banyakFile){
+      pthread_join(myThreads[i], NULL);
+      i++;
+    }        
+
+  }
+  else if (strcmp(argv[1], "*") == 0 && argc == 2)
+  {
+    // Ini program ketiga (\*)
     printf("");
-    getcwd(active_dir, 1024);
+    int banyakFile = 0;
+    char files[MAX_SIZE][MAX_SIZE];
 
-    if (strcmp("-f", argv[1]) == 0) {
-        printf("");
-        if (argc < 3) err();
+    DIR *d;
+    struct dirent *dir;
+    d = opendir(".");
 
-        categorize_files(argc, argv, active_dir);
-    } else if (strcmp("-d", argv[1]) == 0) {
-        printf("");
-        if (argc != 3) err();
-        mode = 1;
-
-        sprintf(dir, "%s", argv[2]);
-
-        categorize_dir(dir, active_dir, dir);
-
-
-        int j = 0;
-        while(j < current_thread){
-            printf("");
-            pthread_join(tid[j], NULL);
-            j++;
+    if (d)
+    {
+      while ((dir = readdir(d)) != NULL)
+      {
+        if(strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0){
+          continue;
         }
-
-        if (status) {
-            printf("");
-            printf("Direktori sukses disimpan!\n");
-        } else {
-            printf("");
-            printf("Yah, gagal disimpan :(\n");
+          
+        // Jika direktori, maka ga bisa  
+        if(isDirectory(dir->d_name))
+        {
+          printf("%s adalah direktori\n", dir->d_name);
         }
-    } else if (strcmp("*", argv[1]) == 0) {
-        printf("");
-        if (argc > 2) err();
-        mode = 1;
-
-        getcwd(dir, 1024);
-
-        categorize_dir(dir, active_dir, active_dir);
-        int k = 0;
-        while(k < current_thread){
-            printf("");
-            pthread_join(tid[k], NULL);
-            k++;
+        else
+        {
+          char tmp[100];
+          strcpy(tmp, dir->d_name);
+          sprintf(files[banyakFile], "%s", dir->d_name);
+          banyakFile++;          
         }
-        if (status) {
-            printf("");
-            printf("Direktori sukses disimpan!\n");
-        } else {
-            printf("");
-            printf("Yah, gagal disimpan :(\n");
-        }
+      }
+      closedir(d);
+
+    }
+
+    pthread_t myThreads[banyakFile];
+    int i = 0;
+    // create pthread
+    while(i < banyakFile){
+      pthread_create(&myThreads[i], NULL, pindahFile, files[i]);
+      i++;
+    }     
+      
+    // join pthread
+    i = 0;
+    while(i < banyakFile){
+      pthread_join(myThreads[i], NULL);
+      i++;
+    }    
+      
+  }
+  else{
+    puts("Masukan argumen dengan benar (-d / -f / *)");
+  }
+    
+  return 0;
+}
+#pragma GCC diagnostic warning "-Wformat-zero-length"
+
+int isDirectory(const char *myPath)
+{
+  struct stat myPath_stat;
+  stat(myPath, &myPath_stat);
+  return S_ISDIR(myPath_stat.st_mode);
+}
+
+// Fungsi memindah file
+void *pindahFile(void *filename) 
+{
+  // Deklarasi nilai sumber
+  char *sumber = (char *)filename;
+  char sumberBaru[MAX_SIZE];
+  strcpy(sumberBaru, sumber);
+
+  // Deklarasi nilai target
+  char *target = strrchr(sumberBaru, '/');
+  char namaFileBaru[MAX_SIZE];  
+
+  if(target){
+    strcpy(namaFileBaru, target + 1);
+  }
+  else{
+    strcpy(namaFileBaru, sumberBaru);
+  }
+
+  const char *dot = strrchr(namaFileBaru, '.');
+  struct stat st = {0};
+  char folder[MAX_SIZE];
+
+  if(!dot || dot == sumberBaru){
+    strcpy(folder, "Unknown");
+  }    
+  else
+  {
+    strcpy(folder, dot + 1);
+    int i = 0;
+    while(folder[i]!='\0')
+    {
+      if(folder[i]>='A' && folder[i]<='Z')
+        folder[i] += 32;
+      i++;
+    }
+  }
+
+  // Mulai processing file
+  int ch;
+  FILE *file1, *file2;
+
+  if(!target){
+    target = sumberBaru;
+  }
+  else{
+    target = target + 1;    
+  }
+
+  // Deklarasi variabel targetBaru
+  char targetBaru[MAX_SIZE];
+  sprintf(targetBaru, "%s/%s/%s", cwd, folder, target);
+
+  // untuk cek apakah akses file error
+  int x1 = 0,y1 = 0;
+
+  file1 = fopen(sumberBaru, "r");
+
+  if (!file1) 
+  {
+    printf("Tidak bisa dibuka :( %s!\n", sumberBaru);
+    x1 = 1;
+    pthread_exit(NULL); 
+    return NULL;
+  }
+
+  if (stat(folder, &st) == -1)
+    mkdir(folder, 0700);
+
+  file2 = fopen(targetBaru, "w");
+
+  if (!file2) 
+  {
+    printf("Tidak bisa dibuka :( %s!\n", targetBaru);
+    y1 = 1;
+    pthread_exit(NULL); 
+    return NULL;
+  }  
+
+  while ((ch = fgetc(file1)) != EOF){
+    fputc(ch, file2);
+  } 
+
+  // check menandakan dia program pertama (-f) atau kedua (-d) 
+  if (check == 0)
+  {
+    iter++;
+    // jika gagal, print gagal
+    if (x1 == 1 || y1 == 1) {
+      printf("File %d: Sad, gagal :(\n", iter);
     } else {
-        printf("");
-        err();
+      printf("File %d: Berhasil Dikategorikan\n", iter);
     }
+  } else {
+    if (once == 0) {      
+      once = 1;
+      if (x1 == 1 || y1 == 1) {
+        printf("Yah, gagal disimpan :(\n");
+      } else {
+        printf("Direktori sukses disimpan\n");
+      }          
+    }
+  }
 
-    exit(EXIT_SUCCESS);
+  //close file
+  fclose(file1);
+  fclose(file2);
+
+  //remove new sumber nya
+  remove(sumberBaru);
+
+  //exit pthread
+  pthread_exit(NULL); 
+
 }
