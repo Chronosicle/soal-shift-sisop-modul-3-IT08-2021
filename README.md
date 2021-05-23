@@ -11,6 +11,14 @@
 #
 
 - [Soal 1](#soal1)
+  - [Soal 1A](#soal-1a)
+  - [Soal 1B](#soal-1b)
+  - [Soal 1C](#soal-1c)
+  - [Soal 1D](#soal-1d)
+  - [Soal 1E](#soal-1e)
+  - [Soal 1F](#soal-1f)
+  - [Soal 1G](#soal-1g)
+  - [Soal 1H](#soal-1h)
 - [Soal 2](#soal2)
   - [Soal 2A](#soal-2a)
   - [Soal 2B](#soal-2b)
@@ -20,6 +28,893 @@
 #
 
 # Soal1
+
+Keverk adalah orang yang cukup ambisius dan terkenal di angkatannya. Sebelum dia menjadi ketua departemen di HMTC, dia pernah mengerjakan suatu proyek dimana keverk tersebut meminta untuk membuat server database buku. Proyek ini diminta agar dapat digunakan oleh pemilik aplikasi dan diharapkan bantuannya dari pengguna aplikasi ini.</br>
+</br>
+Di dalam proyek itu, Keverk diminta: </br>
+
+### Soal 1A
+
+Pada saat client tersambung dengan server, terdapat dua pilihan pertama, yaitu register dan login. Jika memilih register, client akan diminta input id dan passwordnya untuk dikirimkan ke server. User juga dapat melakukan login. Login berhasil jika id dan password yang dikirim dari aplikasi client sesuai dengan list akun yang ada didalam aplikasi server. Sistem ini juga dapat menerima multi-connections. Koneksi terhitung ketika aplikasi client tersambung dengan server. Jika terdapat 2 koneksi atau lebih maka harus menunggu sampai client pertama keluar untuk bisa melakukan login dan mengakses aplikasinya. Keverk menginginkan lokasi penyimpanan id dan password pada file bernama akun.txt dengan format :
+
+<b>akun.txt</b></br>
+
+> id:password </br>
+> id2:password2
+
+### Soal 1B
+
+Sistem memiliki sebuah database yang bernama files.tsv. Isi dari files.tsv ini adalah path file saat berada di server, publisher, dan tahun publikasi. Setiap penambahan dan penghapusan file pada folder file yang bernama FILES pada server akan memengaruhi isi dari files.tsv. Folder FILES otomatis dibuat saat server dijalankan.
+
+### Soal 1C
+
+Tidak hanya itu, Keverk juga diminta membuat fitur agar client dapat menambah file baru ke dalam server. Direktori FILES memiliki struktur direktori di bawah ini :
+
+Direktori <b>FILES</b>
+
+> File1.ekstensi </br>
+> File2.ekstensi
+
+Pertama client mengirimkan input ke server dengan struktur sebagai berikut :</br>
+Contoh Command Client :
+
+> add
+
+Output Client Console:
+
+> Publisher: </br>
+> Tahun Publikasi:</br>
+> Filepath:
+
+Kemudian, dari aplikasi client akan dimasukan data buku tersebut (perlu diingat bahwa Filepath ini merupakan path file yang akan dikirim ke server). Lalu client nanti akan melakukan pengiriman file ke aplikasi server dengan menggunakan socket. Ketika file diterima di server, maka row dari files.tsv akan bertambah sesuai dengan data terbaru yang ditambahkan.
+
+### Soal 1D
+
+Dan client dapat mendownload file yang telah ada dalam folder FILES di server, sehingga sistem harus dapat mengirim file ke client. Server harus melihat dari files.tsv untuk melakukan pengecekan apakah file tersebut valid. Jika tidak valid, maka mengirimkan pesan error balik ke client. Jika berhasil, file akan dikirim dan akan diterima ke client di folder client tersebut.
+
+Contoh Command client
+
+> download TEMPfile.pdf
+
+### Soal 1E
+
+Setelah itu, client juga dapat menghapus file yang tersimpan di server. Akan tetapi, Keverk takut file yang dibuang adalah file yang penting, maka file hanya akan diganti namanya menjadi ‘old-NamaFile.ekstensi’. Ketika file telah diubah namanya, maka row dari file tersebut di file.tsv akan terhapus.
+
+Contoh Command Client:
+
+> delete TEMPfile.pdf
+
+### Soal 1F
+
+Client dapat melihat semua isi files.tsv dengan memanggil suatu perintah yang bernama see. Output dari perintah tersebut keluar dengan format.
+
+Contoh Command Client :
+
+> see
+
+Contoh Format Output pada Client:
+
+> Nama:<br>
+> Publisher: <br>
+> Tahun publishing:<br>
+> Ekstensi File : <br>
+> Filepath : <br>
+
+> Nama: <br>
+> Publisher: <br>
+> Tahun publishing: <br>
+> Ekstensi File : <br>
+> Filepath : <br>
+
+### Soal 1G
+
+Aplikasi client juga dapat melakukan pencarian dengan memberikan suatu string. Hasilnya adalah semua nama file yang mengandung string tersebut. Format output seperti format output f.
+
+Contoh Client Command:
+
+> find TEMP
+
+### Soal 1H
+
+Dikarenakan Keverk waspada dengan pertambahan dan penghapusan file di server, maka Keverk membuat suatu log untuk server yang bernama running.log. Contoh isi dari log ini adalah
+
+<b>running.log</b></br>
+
+> Tambah : File1.ektensi (id:pass)</br>
+> Hapus : File2.ektensi (id:pass)
+
+Akan tetapi, kevek saat itu masih belum paham dengan sistem server dan client.
+
+Bantulah Keverk untuk menyelesaikan proyek ini!
+
+### <b>Note:</b>
+
+- Dilarang menggunakan system() dan execv(). Silahkan dikerjakan sepenuhnya dengan thread dan socket programming.
+- Untuk download dan upload silahkan menggunakan file teks dengan ekstensi dan isi bebas (yang ada isinya bukan touch saja dan tidak kosong) dan requirement untuk benar adalah percobaan dengan minimum 5 data.
+
+Struktur Direktori:
+
+> ├── Client</br>
+> │ ... ├── client.c</br>
+> │ ... ├── File2.extensi</br>
+> │ ... └── File1.extensi</br>
+> └── Server</br>
+> ...... ├── akun.txt</br>
+> ...... ├── files.tsv</br>
+> ...... ├── server.c</br>
+> ...... ├── running.log</br>
+> ...... └── FILES</br>
+
+     ..............       ├── File2.extensi</br>
+    ..............       └── File1.ekstensi</br>
+
+## Pengerjaan Soal 1
+
+### Pada Server
+
+- Mendefinisikan port server dan juga max client, dan juga id dan pass untuk login dan register nya nanti.
+
+```C
+#define PORT 1222
+#define MAX_CLIENTS 1000
+
+pthread_t tid[MAX_CLIENTS];
+
+int login = 0;
+pthread_t login_client_id;
+char id_login[100] = {0};
+char pass_login[100] = {0};
+```
+
+- Membuat command see untuk memunculkan semua file yang ada. Dimana output yang ditampilkan terdapat nama filesnya, publisher, tahun publikasi file dan filepathnya.
+
+```C
+          if(state == 5){
+            FILE *filein;
+            filein = fopen("files.tsv","r");
+
+            char temp[1000] = {0};
+            char filepath[100] = {0},publisher[100] = {0},tahun[100] = {0},nama[100] = {0},ekstensi[100] = {0};
+
+            while((fscanf(filein,"%[^\n]%*c",temp)) != EOF){
+                    char *token = strtok(temp,"\t");
+                    if(token != NULL){
+                        strcpy(filepath,token);
+                        token = strtok(NULL,"\t");
+                    }
+                    if(token !=NULL){
+                        strcpy(publisher,token);
+                        token = strtok(NULL,"\t");
+                    }
+
+                    if(token !=NULL){
+                        strcpy(tahun,token);
+                    }
+
+                    token = strtok(temp,"/");
+                    token = strtok(NULL,".");
+                    strcpy(nama, token);
+                    token = strtok(NULL,".");
+                    strcpy(ekstensi,token);
+
+                    strcpy(message,"Nama: ");
+                    strcat(message,nama);
+                    strcat(message,"\n");
+                    strcat(message,"Publisher: ");
+                    strcat(message,publisher);
+                    strcat(message,"\n");
+                    strcat(message,"Tahun publishing: ");
+                    strcat(message,tahun);
+                    strcat(message,"\n");
+                    strcat(message,"Ekstensi: ");
+                    strcat(message,ekstensi);
+                    strcat(message,"\n");
+                    strcat(message,"Filepath: ");
+                    strcat(message,filepath);
+                    strcat(message,"\n");
+                    send(*new_socket , message , strlen(message) , 0 );
+
+                    valread = recv( *new_socket , buffer, 1000, 0);
+
+            }
+            strcpy(message,"DONE!!!");
+            send(*new_socket , message , strlen(message) , 0 );
+            valread = recv( *new_socket , buffer, 1000, 0);
+
+            fclose(filein);
+            state = 1;
+        }
+```
+
+- fungsi find untuk mencari file di server
+
+```C
+              ret = strstr(buffer, "find");
+                if(ret){
+                    char *token = strtok(buffer," ");
+                    while(token != NULL){
+                        strcpy(parameter[ind],token);
+                        ind++;
+                        token = strtok(NULL," ");
+                    }
+                    state = 6;
+                }
+```
+
+```C
+          if(state == 6){
+            FILE *filein;
+            filein = fopen("files.tsv","r");
+
+            char temp[1000] = {0};
+            char filepath[100] = {0},publisher[100] = {0},tahun[100] = {0},nama[100] = {0},ekstensi[100] = {0};
+
+            while((fscanf(filein,"%[^\n]%*c",temp)) != EOF){
+                    char *token = strtok(temp,"\t");
+                    if(token != NULL){
+                        strcpy(filepath,token);
+                        token = strtok(NULL,"\t");
+                    }
+                    if(token !=NULL){
+                        strcpy(publisher,token);
+                        token = strtok(NULL,"\t");
+                    }
+
+                    if(token !=NULL){
+                        strcpy(tahun,token);
+                    }
+
+                    token = strtok(temp,"/");
+                    token = strtok(NULL,".");
+                    strcpy(nama, token);
+                    token = strtok(NULL,".");
+                    strcpy(ekstensi,token);
+
+                    char *ret =strstr(filepath,parameter[1]);
+
+                    if(ret){
+                        strcpy(message,"Nama: ");
+                        strcat(message,nama);
+                        strcat(message,"\n");
+                        strcat(message,"Publisher: ");
+                        strcat(message,publisher);
+                        strcat(message,"\n");
+                        strcat(message,"Tahun publishing: ");
+                        strcat(message,tahun);
+                        strcat(message,"\n");
+                        strcat(message,"Ekstensi: ");
+                        strcat(message,ekstensi);
+                        strcat(message,"\n");
+                        strcat(message,"Filepath: ");
+                        strcat(message,filepath);
+                        strcat(message,"\n");
+                        send(*new_socket , message , strlen(message) , 0 );
+
+                        valread = recv( *new_socket , buffer, 1000, 0);
+                    }
+
+            }
+            strcpy(message,"DONE!!!");
+            send(*new_socket , message , strlen(message) , 0 );
+            valread = recv( *new_socket , buffer, 1000, 0);
+
+            fclose(filein);
+            state = 1;
+        }
+```
+
+- Fungsi register untuk mendaftar akun dengan mengisikan id dan password user
+
+```C
+          if(state == 0){
+            strcpy(message,"1.Register\n2.Login\nInput>>");
+            send(*new_socket , message , strlen(message) , 0);
+            valread = recv( *new_socket , buffer, 1024, 0);
+            if(checkClose(valread,new_socket)){
+                break;
+            };
+            if(strcmp(buffer,"1") == 0){
+                strcpy(message,"Registrasi\nID >>");
+                send(*new_socket , message , strlen(message) , 0);
+                char id[100] = {0};
+                char password[100] = {0};
+                valread = recv( *new_socket , id, 100, 0);
+                if(checkClose(valread,new_socket)){
+                    break;
+                };
+
+
+                strcpy(message,"Password >>");
+                send(*new_socket , message , strlen(message) , 0);
+                valread = recv( *new_socket , password, 100, 0);
+                if(checkClose(valread,new_socket)){
+                    break;
+                };
+
+                FILE *fileout;
+                fileout = fopen("akun.txt", "a");
+                char concat[200] = {0};
+                strcpy(concat,id);
+                strcat(concat,":");
+                strcat(concat,password);
+                fputs(concat,fileout);
+                fputs("\n",fileout);
+                fclose(fileout);
+
+                printf("Data berhasil disimpan\n");
+          }
+```
+
+- Fungsi Login untuk login dengan akun yang sudah terdaftar
+
+```C
+              else if(strcmp(buffer,"2") == 0){
+                strcpy(message,"Login\nID >>");
+                send(*new_socket , message , strlen(message) , 0);
+
+                char id[100] = {0};
+                char password[100] = {0};
+                valread = recv( *new_socket , id, 100, 0);
+                if(checkClose(valread,new_socket)){
+                    break;
+                };
+
+
+                strcpy(message,"Password >>");
+                send(*new_socket , message , strlen(message) , 0);
+                valread = recv( *new_socket , password, 100, 0);
+                if(checkClose(valread,new_socket)){
+                    break;
+                };
+
+                FILE *filein;
+                filein = fopen("akun.txt","r");
+                char temp[100] = {0};
+                char tempId[100] = {0};
+                char tempPassword[100] = {0};
+                bool found = false;
+                while((fscanf(filein,"%[^\n]%*c",temp)) != EOF){
+                    char *token = strtok(temp,":");
+                    if(token != NULL){
+                        strcpy(tempId,token);
+                        token = strtok(NULL,":");
+                    }
+
+                    if(token != NULL){
+                        strcpy(tempPassword,token);
+                    }
+                    if(strcmp(id,tempId) == 0 && strcmp(password,tempPassword)==0){
+                        found = true;
+                        break;
+                    }
+                }
+
+                if(login == 0){
+                    if(found){
+                        strcpy(message,"Login berhasil\n");
+                        send(*new_socket , message , strlen(message) , 0);
+                        login_client_id = pthread_self();
+                        login = 1;
+                        state = 1;
+                        strcpy(id_login, id);
+                        strcpy(pass_login, password);
+                    }else{
+                        strcpy(message,"Login gagal\n");
+                        send(*new_socket , message , strlen(message) , 0);
+                    }
+                }else{
+                    strcpy(message,"Sudah ada client lain yang login\n");
+                    send(*new_socket , message , strlen(message) , 0);
+                }
+            }
+        }
+```
+
+- Fungsi delete untuk menghapus file yang ada di server dengan mengganti namanya menjadi old-(namafile).exstensi. Setelah itu, program akan menghapus baris dari file ini pada database file.tsv
+
+```C
+                ret = strstr(buffer, "delete");
+                if(ret){
+                    char *token = strtok(buffer," ");
+                    while(token != NULL){
+                        strcpy(parameter[ind],token);
+                        ind++;
+                        token = strtok(NULL," ");
+                    }
+                    state = 4;
+                }
+```
+
+```C
+          if(state == 4){
+            //cek db
+            FILE *filein;
+            filein = fopen("files.tsv","r");
+            char search[1000] = {0};
+            strcpy(search,"FILES/");
+            strcat(search,parameter[1]);
+
+            char temp[1000] = {0};
+            char filepath[100]= {0};
+            bool found = false;
+            while((fscanf(filein,"%[^\n]%*c",temp)) != EOF){
+                    char *token = strtok(temp,"\t");
+                    if(token != NULL){
+                        strcpy(filepath,token);
+                    }
+                    if(strcmp(search, filepath) == 0){
+                        found = true;
+                        break;
+                    }
+            }
+            fclose(filein);
+
+            if(found){
+                char fileDelete[100] = {0}, newName[100]= {0};
+                strcpy(fileDelete,"FILES/");
+                strcat(fileDelete,parameter[1]);
+                strcpy(newName,"FILES/old-");
+                strcat(newName,parameter[1]);
+                rename(fileDelete,newName);
+
+                FILE *fileout;
+                filein = fopen("files.tsv","r");
+
+                //buat file kosongan
+                fileout = fopen("tempfiles.tsv","w");
+                fclose(fileout);
+
+                while((fscanf(filein,"%[^\n]%*c",temp)) != EOF){
+                    char temp2[100] = {0};
+                    strcpy(temp2,temp);
+                    char *token = strtok(temp,"\t");
+                    if(token != NULL){
+                        strcpy(filepath,token);
+                    }
+                    if(strcmp(search, filepath) != 0){
+                        fileout = fopen("tempfiles.tsv","a");
+                        fputs(temp2, fileout);
+                        fputs("\n",fileout);
+                        fclose(fileout);
+                    }
+                }
+                remove("files.tsv");
+                rename("tempfiles.tsv","files.tsv");
+
+                fileout = fopen("running.log","a");
+                fprintf(fileout,"Hapus : %s (%s:%s)\n",parameter[1],id_login,pass_login);
+                fclose(fileout);
+
+                printf("Delete berhasil \n");
+            }else{
+                printf("Error file not found\n");
+            }
+            state = 1;
+        }
+```
+
+- Fungsi download untuk mendownload file dari server ke client
+
+```C
+                char *ret;
+                ret = strstr(buffer, "download");
+                if(ret){
+                    char *token = strtok(buffer," ");
+                    while(token != NULL){
+                        strcpy(parameter[ind],token);
+                        ind++;
+                        token = strtok(NULL," ");
+                    }
+                    state = 3;
+                }
+```
+
+```C
+          if(state == 3){
+            FILE *filein;
+            filein = fopen("files.tsv","r");
+            char search[1000] = {0};
+            strcpy(search,"FILES/");
+            strcat(search,parameter[1]);
+
+            char temp[1000] = {0};
+            char filepath[100] = {0};
+            bool found = false;
+            while((fscanf(filein,"%[^\n]%*c",temp)) != EOF){
+                    char *token = strtok(temp,"\t");
+                    if(token != NULL){
+                        strcpy(filepath,token);
+                    }
+                    if(strcmp(search, filepath) == 0){
+                        found = true;
+                        break;
+                    }
+            }
+            fclose(filein);
+            //kirim file
+            if(found){
+                bzero(message,1024);
+                bzero(buffer,1024);
+                strcpy(message,"Preparing Download");
+                send(*new_socket , message , strlen(message) , 0);
+                valread = recv( *new_socket , buffer, 1024, 0);
+
+                bzero(message,1024);
+                bzero(buffer,1024);
+
+                //kirim namafilenya
+                strcpy(message,parameter[1]);
+                send(*new_socket , message , strlen(message) , 0);
+                valread = recv( *new_socket , buffer, 1024, 0);
+
+                FILE *filein;
+                filein = fopen(filepath,"r");
+
+                while (fgets(temp,1000,filein))
+                {
+                    send(*new_socket , temp , strlen(temp) , 0 );
+                    valread = recv( *new_socket , buffer, 1024, 0);
+                }
+                printf("Sending Done\n");
+                strcpy(message, "DONE!!!");
+                send(*new_socket , message , strlen(message) , 0 );
+                valread = recv( *new_socket , buffer, 1024, 0);
+            }else{
+                strcpy(message, "Error file not found\n");
+                send(*new_socket , message , strlen(message) , 0 );
+            }
+            state = 1;
+          }
+```
+
+- Fungsi add untuk menambahkan file baru dari client ke server
+
+```C
+          else if(state == 2){
+            strcpy(message, "Publisher: ");
+            send(*new_socket , message , strlen(message) , 0);
+            char publisher[100]={0};
+            valread = recv( *new_socket , publisher, 100, 0);
+            if(checkClose(valread,new_socket)){
+                break;
+            };
+
+            strcpy(message, "Tahun Publikasi: ");
+            send(*new_socket , message , strlen(message) , 0);
+            char tahun[100]={0};
+            valread = recv( *new_socket , tahun, 100, 0);
+            if(checkClose(valread,new_socket)){
+                break;
+            };
+
+            strcpy(message, "Filepath: ");
+            send(*new_socket , message , strlen(message) , 0);
+            char temp[1000]={0};
+
+            char fileName[1024] = {0},filePath[1024] = {0};
+            valread = recv( *new_socket , fileName, 1024, 0);
+            strcpy(message, "OK");
+            send(*new_socket , message , strlen(message) , 0);
+
+            strcpy(filePath,"FILES/");
+            strcat(filePath,fileName);
+
+            do{
+                bzero(temp,1000);
+                valread = recv( *new_socket , temp, 1000, 0);
+                if(strcmp(temp,"DONE!!!") != 0){
+                    FILE *fileout;
+                    fileout = fopen(filePath,"a");
+                    fputs(temp,fileout);
+                    fclose(fileout);
+                    strcpy(message, "OK");
+                    send(*new_socket , message , strlen(message) , 0);
+                }
+            }while(strcmp(temp,"DONE!!!") != 0);
+            printf("Saving done\n");
+            state = 1;
+
+            FILE *fileout;
+            fileout = fopen("files.tsv","a");
+            fprintf(fileout,"%s\t%s\t%s\n",filePath,publisher,tahun);
+            fclose(fileout);
+
+            fileout = fopen("running.log","a");
+            fprintf(fileout,"Tambah : %s (%s:%s)\n",fileName,id_login,pass_login);
+            fclose(fileout);
+        }
+```
+
+- Pada fungsi main hanya berisikan settingan socket untuk menghubungkan antara server dan client dan juga pembuatan thread terjadi di fungsi main.
+
+```C
+int main(int argc, char const *argv[]) {
+
+    mkdir("FILES",0777);
+
+    int server_fd, new_socket[MAX_CLIENTS];
+    struct sockaddr_in address;
+    int opt = 1;
+    int addrlen = sizeof(address);
+
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+        perror("socket failed");
+        exit(EXIT_FAILURE);
+    }
+
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
+        perror("setsockopt");
+        exit(EXIT_FAILURE);
+    }
+
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = htons( PORT );
+
+    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address))<0) {
+        perror("bind failed");
+        exit(EXIT_FAILURE);
+    }
+
+    if (listen(server_fd, 3) < 0) {
+        perror("listen");
+        exit(EXIT_FAILURE);
+    }
+
+    int ctr = 0;
+    while(1){
+        if ((new_socket[ctr] = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) {
+            perror("accept");
+            exit(EXIT_FAILURE);
+        }
+
+        pthread_create(&(tid[ctr]),NULL,play,&new_socket[ctr]);
+        ctr++;
+        printf("Client %d terhubung\n",ctr);
+    }
+
+    for(int i = 0; i<ctr; i++){
+        pthread_join(tid[i],NULL);
+    }
+    return 0;
+}
+```
+
+### Pada Client
+
+- Pada client hanya terdapat code untuk settingan socket untuk menghubungkan antara server dan client. Lalu juga untuk menampilkan sebuah pesan apabila telah selesai melakukan beberapa fungsi/command yang diminta oleh user. Contoh untuk command "add" akan menampilkan pesan "Saving done" jika berhasil menambahkan file. Untuk command "Download" akan menampilkan pesan "Saving Done" dan juga "Sending Done" jika sudah berhasil mengirim hasil download ke client. Untuk command "delete" akan menampilkan pesan "Delete berhasil". Untuk "Register" akan menampilkan "Data berhasil disimpan". Dan jika program client berhasil terhubung ke server maka akan menampilkan pesan "Client x terhubung" dimana x adalah bilangan bulat menyatakan client keberapa yang terhubung.
+
+```C
+#include <stdio.h>
+#include <sys/socket.h>
+#include <stdlib.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#define PORT 1222
+
+int main(int argc, char const *argv[]) {
+    struct sockaddr_in address;
+    int sock = 0, valread;
+    struct sockaddr_in serv_addr;
+    char *hello = "Hello from client";
+
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        printf("\n Socket creation error \n");
+        return -1;
+    }
+
+    memset(&serv_addr, '0', sizeof(serv_addr));
+
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(PORT);
+
+    if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0) {
+        printf("\nInvalid address/ Address not supported \n");
+        return -1;
+    }
+
+    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+        printf("\nConnection Failed \n");
+        return -1;
+    }
+    while(1){
+        char buffer[1024] = {0};
+        char message[1024] = {0};
+        sleep(0.0001);
+        valread = read( sock , buffer, 1024);
+        printf("%s",buffer );
+        fflush(stdout);
+
+        if(strcmp(buffer,"Filepath: ") == 0){
+
+
+            char filePath[1024] = {0};
+            scanf("%[^\n]%*c", filePath);
+
+
+            //mengirim nama file
+            char tempfilePath[1024] = {0};
+            strcpy(tempfilePath,filePath);
+            char *token = strtok(tempfilePath,"/");
+            char namaFile[1024] = {0};
+            while(token){
+                strcpy(namaFile,token);
+                token = strtok(NULL,"/");
+            }
+            // printf("NAMA FILE = %s\n",namaFile);
+            send(sock , namaFile , strlen(namaFile) , 0 );
+            valread = read( sock , buffer, 1024);
+
+
+            FILE *filein;
+            filein = fopen(filePath,"r");
+            char temp[1000]={0};
+            while (fgets(temp,1000,filein))
+            {
+                send(sock , temp , strlen(temp) , 0 );
+                valread = read( sock , buffer, 1024);
+            }
+            printf("Sending DONE\n");
+            strcpy(message, "DONE!!!");
+            send(sock , message , strlen(message) , 0 );
+
+        }else if(strcmp(buffer,"Preparing Download") == 0){
+            printf("\n");
+            bzero(message,1024);
+            strcpy(message, "OK1");
+            send(sock , message , strlen(message) , 0);
+
+            char temp[1000] = {0}, fileName[1024] = {0};
+            valread = recv( sock , fileName, 1024, 0);
+
+            bzero(message,1024);
+            strcpy(message, "OK2");
+            send(sock , message , strlen(message) , 0);
+
+            do{
+                bzero(temp,1000);
+                valread = recv( sock , temp, 1000, 0);
+                if(strcmp(temp,"DONE!!!") != 0){
+                    FILE *fileout;
+                    fileout = fopen(fileName,"a");
+                    fputs(temp,fileout);
+                    fclose(fileout);
+                    strcpy(message, "OK");
+                    send(sock , message , strlen(message) , 0);
+                }
+            }while(strcmp(temp,"DONE!!!") != 0);
+            strcpy(message, "OK");
+            send(sock , message , strlen(message) , 0);
+            printf("Download Done\n");
+
+        }else{
+            scanf("%[^\n]%*c", message);
+            send(sock , message , strlen(message) , 0 );
+
+            if(strcmp(message,"see") == 0){
+                do{
+
+                        bzero(buffer,1024);
+                        valread = read( sock , buffer, 1024);
+
+                    if(strcmp(buffer,"DONE!!!") != 0){
+                        printf("%s\n", buffer);
+                        strcpy(message, "OK");
+                        send(sock , message , strlen(message) , 0);
+                    }
+                }while(strcmp(buffer,"DONE!!!") != 0);
+
+                strcpy(message, "OK");
+                send(sock , message , strlen(message) , 0);
+            }
+
+            char *ret = strstr(message, "find");
+            if(ret){
+                do{
+
+                        bzero(buffer,1024);
+                        valread = read( sock , buffer, 1024);
+
+                    if(strcmp(buffer,"DONE!!!") != 0){
+                        printf("%s\n", buffer);
+                        strcpy(message, "OK");
+                        send(sock , message , strlen(message) , 0);
+                    }
+                }while(strcmp(buffer,"DONE!!!") != 0);
+                strcpy(message, "OK");
+                send(sock , message , strlen(message) , 0);
+            }
+        }
+
+    }
+
+    close(sock);
+    return 0;
+}
+```
+
+## Kendala yang dihadapi
+
+- Pertama, saat membaca soal sudah banyak sekali, saya langsung pusing
+- Kedua, waktu saya hanya cukup untuk mengerjakan soal no 2 dan 3
+
+## Revisi
+
+- Kami revisi semua point karena sebelumnya belum mengerjakan sama sekali
+
+## Screenshot Hasil
+
+- Hasil Run Register, user mendaftarkan id dan password
+  <br>
+  <img src="Dokumentasi/Soal1/register.png">
+
+- Data id dan password user disimpan di akun.txt
+  <br>
+  <img src="Dokumentasi/Soal1/akuntxt.png">
+
+- Hasil Login, user login dengan id dan password yang sudah didaftarkan sebelumnya
+  <br>
+  <img src="Dokumentasi/Soal1/login.png">
+
+* Saya membuat 3 file pada folder client yaitu coba1.txt sampai coba3.txt
+  <br>
+  <img src="Dokumentasi/Soal1/pertama.png">
+  <br>
+  <img src="Dokumentasi/Soal1/kedua.png">
+  <br>
+  <img src="Dokumentasi/Soal1/ketiga.png">
+
+* Client menambahkan file yang tadi sudah dibuat ke server dengan menggunakan command "add"
+
+- Hasil Run Add
+  <br>
+  <img src="Dokumentasi/Soal1/add1.png">
+  <br>
+  <img src="Dokumentasi/Soal1/add2.png">
+
+* Command "see" untuk melihat file apa saja yang telah disimpan dan ditambahkan sebelumnya
+  <br>
+  <img src="Dokumentasi/Soal1/see.png">
+
+* Client dapat mencari file pada server dengan menggunakan command "find (namafile)"
+  <br>
+  <img src="Dokumentasi/Soal1/find.png">
+
+* Client dapat menghapus file yang sudah ditambahkan sebelumnya di server dengan menggunakan command "delete"
+
+  <br>
+  <img src="Dokumentasi/Soal1/delete1.png">
+  <br>
+  <img src="Dokumentasi/Soal1/delete2.png">
+
+Client juga dapat mendownload file dari server dan dikirimkan ke client. Sebelum itu kita ganti dulu isi dari coba2.txt untuk membuktikan bahwa file tersebut akan berhasil didownload nantinya
+
+- file coba2.txt sebelum diubah pada server
+  <br>
+  <img src="Dokumentasi/Soal1/sebelum.png">
+- file coba2.txt setelah diubah pada server
+  <br>
+  <img src="Dokumentasi/Soal1/sesudah.png">
+
+* isi file coba2.txt sebelumnya pada client
+  <br>
+  <img src="Dokumentasi/Soal1/kedua.png">
+* Menjalankan command "download"
+  <br>
+  <img src="Dokumentasi/Soal1/download1.png">
+* file coba2.txt berhasil didownload dan dikirim ke client
+  <br>
+  <img src="Dokumentasi/Soal1/download2.png">
+
+* Database dengan nama files.tsv yang berisi file yang sudah disimpan dan ditambahkan oleh user
+  <br>
+  <img src="Dokumentasi/Soal1/filestsv.png">
+
+* running.log adalah file untuk merekam / merecord penambahan dan penghapusan file oleh user
+  <br>
+  <img src="Dokumentasi/Soal1/runninglog.png">
 
 # Soal2
 
