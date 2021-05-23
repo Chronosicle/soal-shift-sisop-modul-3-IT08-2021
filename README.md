@@ -310,6 +310,10 @@ void *fact(void* arg)
 
 Pada perhitungan matriks awalnya tidak urut tapi sekarang sudah bisa urut. Terdapat revisi sedikit pada fungsi faktorial karena ada beberapa case yang salah namun sekarang sudah benar.
 
+## Revisi
+
+- Pada soal 2B di bagian fungsi faktorial terdapat kesalahan rumus namun sudah direvisi.
+
 ## Screenshot Hasil
 
 - Hasil Run Soal 2A
@@ -701,6 +705,14 @@ else if (strcmp(argv[1], "*") == 0 && argc == 2)
   }
 ```
 
+## Kendala yang dihadapi
+
+Pada awalnya saya sudah bisa membuat semua fungsi dengan benar hanya saja untuk fungsi "-d" dan "\*" harus bersifat rekursi. Nah pada awalnya saya belum bisa membuat nya secara rekursi sehingga hanya dapat mengoperasikan file dengan tingkat 1 (tidak bisa folder->folder->file). Namun setelah revisi saya melihat referensi codingan teman saya dan berhasil mengaplikasikannya pada program saya
+
+## Revisi
+
+- Perbaikan pada fungsi "-d" dan juga "\*" yang sebelumnya tidak bersifat rekursi sekarang sudah bisa rekursi.
+
 ## Screenshot Hasil
 
 - Hasil run fungsi "-f"
@@ -722,7 +734,3 @@ else if (strcmp(argv[1], "*") == 0 && argc == 2)
   <img src="Dokumentasi/Soal3/5.png">
   <br>
   <img src="Dokumentasi/Soal3/6.png">
-
-  ## Kendala yang dihadapi
-
-  Pada awalnya saya sudah bisa membuat semua fungsi dengan benar hanya saja untuk fungsi "-d" dan "\*" harus bersifat rekursi. Nah pada awalnya saya belum bisa membuat nya secara rekursi sehingga hanya dapat mengoperasikan file dengan tingkat 1 (tidak bisa folder->folder->file). Namun setelah revisi saya melihat referensi codingan teman saya dan berhasil mengaplikasikannya pada program saya
